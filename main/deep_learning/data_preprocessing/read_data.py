@@ -23,7 +23,7 @@ class DataSet:
         # print(file_name)
         for file in file_name:
             image = cv2.imread(file)
-            # print(file)
+            print(file)
             name = file.lstrip(os.path.join(config.DATA_PATH, mode))
             # print(name)
             label = self.name_map.name_to_label(name)
@@ -34,5 +34,5 @@ class DataSet:
 
 if __name__ == "__main__":
     data_set = DataSet()
-    for image, label in data_set.data_generator():
-        print(image.shape, label)
+    for a_image, a_label in data_set.data_generator():
+        print(a_image.shape, a_label)
