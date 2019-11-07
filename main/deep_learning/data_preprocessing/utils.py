@@ -14,3 +14,11 @@ class NameMapID:
         class_name, _ = file_name.split('/')
         return int(self.name_id_map[class_name]) - 1
         # print(class_name)
+
+    def classes(self):
+        return list(self.name_id_map)
+
+
+if __name__=="__main__":
+    namemap = NameMapID()
+    print(namemap.classes())
