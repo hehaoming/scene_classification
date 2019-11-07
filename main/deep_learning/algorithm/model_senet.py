@@ -37,8 +37,12 @@ class Densenet:
         )
 
     def fit(self, lr=0.01, batch_size=32, epoch=1000):
-        densenet = DenseNet121(include_top=False, weights='imagenet', input_tensor=None, input_shape=self.input_shape,
-                               pooling=None, classes=self.output_shape[0])
+        densenet = DenseNet121(include_top=False,
+                               weights='imagenet',
+                               input_tensor=None,
+                               input_shape=self.input_shape,
+                               pooling=None,
+                               classes=self.output_shape[0])
         x = densenet.output
         x = GlobalAveragePooling2D()(x)
         predictions = Dense(self.output_shape[0], activation='softmax')(x)
@@ -63,7 +67,9 @@ class Densenet:
                                                           shuffle=True)
 
         output_model_file = '/home/hehaoming/checkpoint/checkpoint-{epoch:02d}e-val_acc_{val_acc:.2f}.hdf5'
-        checkpoint = keras.callbacks.ModelCheckpoint(output_model_file, monitor='val_acc', verbose=1,
+        checkpoint = keras.callbacks.ModelCheckpoint(output_model_file,
+                                                     monitor='val_acc',
+                                                     verbose=1,
                                                      save_best_only=True)
         history = model_densenet.fit_generator(train_data,
                                                steps_per_epoch=math.ceil(self.num_samples / batch_size),
