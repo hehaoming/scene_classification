@@ -3,7 +3,7 @@ import keras
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications.densenet import DenseNet121
 from keras.applications.densenet import preprocess_input
-from keras.layers import Dense, GlobalAveragePooling2D
+from keras.layers import Dense, GlobalAveragePooling2D, GlobalMaxPooling2D
 from keras.models import Model
 from keras.optimizers import RMSprop
 import main.deep_learning.config as config
@@ -36,7 +36,7 @@ class Densenet:
             preprocessing_function=preprocess_input,
         )
 
-    def fit(self, lr=0.01, batch_size=32, epoch=1000):
+    def fit(self, lr=0.01, batch_size=32, epoch=8):
         densenet = DenseNet121(include_top=False,
                                weights='imagenet',
                                input_tensor=None,
@@ -44,8 +44,10 @@ class Densenet:
                                pooling=None,
                                classes=self.output_shape[0])
         x = densenet.output
-        x = GlobalAveragePooling2D()(x)
-        predictions = Dense(self.output_shape[0], activation='softmax')(x)
+        # x = GlobalAveragePooling2D()(x)
+        x = GlobalMaxPooling2D()(x)
+        hidden = Dense(128, activation='softmax')(x)
+        predictions = Dense(self.output_shape[0], activation='softmax')(hidden)
         model_densenet = Model(inputs=densenet.input, outputs=predictions)
         print(model_densenet.summary())
 
