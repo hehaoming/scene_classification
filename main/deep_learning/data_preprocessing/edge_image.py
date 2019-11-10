@@ -15,20 +15,34 @@ class EdgeImageGenerator:
 
     @staticmethod
     def get_edge_image(image):
-        edge_0 = cv2.Canny(image, 100, 200).reshape(256, 256, 1)
-
-        edge_1 = cv2.Sobel(image, cv2.CV_8U, 1, 0, ksize=5).reshape(256, 256, 1)
-        edge_sobel = cv2.Sobel(image, cv2.CV_64F, 1, 0, ksize=5)
+        edge_0 = cv2.Canny(image, threshold1=100, threshold2=200).reshape(256, 256, 1)
+        edge_1 = cv2.Sobel(image, cv2.CV_8U, 1, 1, ksize=5).reshape(256, 256, 1)
+        edge_sobel = cv2.Sobel(image, cv2.CV_64F, 1, 1, ksize=5)
         abs_sobel64f = np.absolute(edge_sobel)
         edge_2 = np.uint8(abs_sobel64f).reshape(256, 256, 1)
-        # plt.subplot(121)
+        # plt.subplot(221)
         # plt.imshow(image, cmap='gray')
         # plt.title('Original Image')
         # plt.xticks([])
         # plt.yticks([])
-        # plt.subplot(122)
-        # plt.imshow(edges, cmap='gray')
-        # plt.title('Edge Image')
+        #
+        # plt.subplot(222)
+        # plt.imshow(edge_0.reshape((256, 256)), cmap='gray')
+        # plt.title('edge_0 Image')
+        # plt.xticks([])
+        # plt.yticks([])
+        #
+        #
+        # plt.subplot(223)
+        # plt.imshow(edge_1.reshape((256, 256)), cmap='gray')
+        # plt.title('edge_1 Image')
+        # plt.xticks([])
+        # plt.yticks([])
+        #
+        #
+        # plt.subplot(224)
+        # plt.imshow(edge_2.reshape((256, 256)), cmap='gray')
+        # plt.title('edge_2 Image')
         # plt.xticks([])
         # plt.yticks([])
         # plt.show()
@@ -47,4 +61,6 @@ class EdgeImageGenerator:
 
 if __name__ == "__main__":
     image_gen = EdgeImageGenerator()
-    image_gen.image_to_edge(True)
+    image = cv2.imread("/Volumes/ELEMENTS/machine_learning/rssrai2019_scene_classification/val/棒球场/baseball-field_00524.jpg", 0)
+    image = cv2.resize(image, (256, 256), interpolation=cv2.INTER_CUBIC)
+    image_gen.get_edge_image(image)

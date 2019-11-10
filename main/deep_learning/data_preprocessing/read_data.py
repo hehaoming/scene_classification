@@ -82,4 +82,4 @@ if __name__ == "__main__":
     data_set = DataSet(True)
     # data_set.count_num_each_class()
     for a_image, a_label in data_set.data_generator_with_edge():
-        print(a_image.shape, a_label)
+        print(a_image, a_label)
