@@ -16,9 +16,18 @@ class EdgeImageGenerator:
     @staticmethod
     def get_edge_image(image):
         edge_0 = cv2.Canny(image, threshold1=100, threshold2=200).reshape(256, 256, 1)
-        edge_1 = cv2.Sobel(image, cv2.CV_8U, 1, 1, ksize=5).reshape(256, 256, 1)
-        edge_sobel = cv2.Sobel(image, cv2.CV_64F, 1, 1, ksize=5)
-        abs_sobel64f = np.absolute(edge_sobel)
+
+        x = cv2.Sobel(image, cv2.CV_16S, 1, 0)
+        y = cv2.Sobel(image, cv2.CV_16S, 0, 1)
+        absX = cv2.convertScaleAbs(x)
+        absY = cv2.convertScaleAbs(y)
+        edge_1 = cv2.addWeighted(absX, 0.5, absY, 0.5, 0).reshape(256, 256, 1)
+
+        x = cv2.Sobel(image, cv2.CV_64F, 2, 0)
+        y = cv2.Sobel(image, cv2.CV_64F, 0, 2)
+        absX = cv2.convertScaleAbs(x)
+        absY = cv2.convertScaleAbs(y)
+        abs_sobel64f = cv2.addWeighted(absX, 0.5, absY, 0.5, 0).reshape(256, 256, 1)
         edge_2 = np.uint8(abs_sobel64f).reshape(256, 256, 1)
         # plt.subplot(221)
         # plt.imshow(image, cmap='gray')
@@ -61,6 +70,7 @@ class EdgeImageGenerator:
 
 if __name__ == "__main__":
     image_gen = EdgeImageGenerator()
-    image = cv2.imread("/Volumes/ELEMENTS/machine_learning/rssrai2019_scene_classification/val/棒球场/baseball-field_00524.jpg", 0)
-    image = cv2.resize(image, (256, 256), interpolation=cv2.INTER_CUBIC)
-    image_gen.get_edge_image(image)
+    image_gen.image_to_edge(False)
+    # image = cv2.imread("/Volumes/ELEMENTS/machine_learning/rssrai2019_scene_classification/val/棒球场/baseball-field_00524.jpg", 0)
+    # image = cv2.resize(image, (256, 256), interpolation=cv2.INTER_CUBIC)
+    # image_gen.get_edge_image(image)

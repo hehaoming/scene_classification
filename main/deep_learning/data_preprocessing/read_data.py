@@ -30,7 +30,7 @@ class DataSet:
             # print(name)
             label = self.name_map.name_to_label(name)
             # print(label)
-            yield image, label
+            yield image, label, name
 
     def data_generator_gray(self):
         """
